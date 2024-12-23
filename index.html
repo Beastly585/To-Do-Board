@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Post-it que?</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <link rel="stylesheet" href="./style.css">
+
+</head>
+
+
+<body>
+
+
+  <header></header>
+
+  <div class="delete-area">
+    <i class="fa-solid fa-trash"></i>
+  </div>
+
+  <div class="custom-alerter">
+    <div class="alert-msg">
+      
+    </div>
+  </div>
+
+  
+    <div class="nav-main-container">
+
+      <div class="save-item nav-item">
+        <i class="fa-regular fa-floppy-disk save1"></i>
+      </div>
+      
+      <div class="search-item nav-item">
+        <i class="fa-solid fa-magnifying-glass" id="search"></i>
+        <div class="searchbar">
+          <input type="text" id="userSearch">
+          <button class="search-go">GO</button>
+          <i class="fa-regular fa-plus close"></i>
+        </div>
+        
+      </div>
+
+      <div class="new-item nav-item">
+        <div class="new-entry">
+          <i class="fa-regular fa-plus" id="create"></i>
+        </div>
+        
+        <div class="new-selector">
+          <div class="title-input sub1">
+            <label for="newTitle">TASK</label>
+            <input type="text" id="newTitle" placeholder="Label">
+          </div>
+          <div class="content-input sub2">
+            <label for="stringInput">DETAILS</label>
+            <textarea type="text" id="stringInput" placeholder="Insert text"></textarea>
+          </div>
+          <div class="bgcolor-select sub3" id="bgColorSelect">
+            <label for="colorPick">COLOR</label>
+            <div class="color-options" id="colorPick">
+              <button class="color orange"></button>
+              <button class="color yellow"></button>
+              <button class="color green"></button>
+              <button class="color blue"></button>
+              <button class="color pink"></button>
+              <button class="color purple"></button>
+              
+            </div>
+          </div>
+        
+          
+
+          <button class="create-button">CREATE</button>
+        </div>
+      </div>
+    </div>
+  
+
+
+    <div class="board" id="board">
+    
+    </div>
+
+
+
+  <footer>
+
+  </footer>
+
+
+</body>
+
+<script src="./script.js"></script>
+
+</html>
