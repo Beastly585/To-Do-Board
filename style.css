@@ -257,7 +257,7 @@ html, body {
 
 .moved {
   display: flex;
-  transform: translate(-123px, 122px);
+  transform: translate(-123px, 128px);
 }
 
 .sub1, .sub2 {
@@ -271,10 +271,10 @@ html, body {
 }
 
 label {text-align: center; width: 100%;
-  margin-bottom: 5px;}
+  margin-bottom: 5px; padding: 2px 0px; color: white; background-color: black;}
 
 .sub1 input {
-  width: 160px;
+  width: 100%;
 
   line-height: 20px;
 
@@ -289,7 +289,7 @@ label {text-align: center; width: 100%;
 }
 
 .sub2 textarea {
-  width: 160px;
+  width: 100%;
   height: 40px;
 
   margin: 0;
@@ -307,9 +307,11 @@ label {text-align: center; width: 100%;
   text-align: center;
 
   gap: 10px;
+
+  font-family: 'Old';
 }
 
-.sub3 label {width: 100%; background-color: black;}
+.sub3 label {width: 100%; background-color: black; color: white}
 
 .sub3 .color-options {
   width: 100%;
@@ -503,6 +505,8 @@ label {text-align: center; width: 100%;
   transform: translateX(-50%);
 
   z-index: -1;
+
+  box-shadow: 2px 2px black;
 }
 
 .div-border::before {
@@ -547,6 +551,8 @@ label {text-align: center; width: 100%;
 
 .board.active {
   display: block;
+  position: relative;
+  z-index: 100000004;
 }
 
 

@@ -10,11 +10,13 @@ let searchButton = document.querySelector('.search-go');
 let closeBoard = document.querySelectorAll('.board-close');
 let newBoard = document.querySelector('.add-board');
 
-let activeBoard = document.querySelectorAll('.board.active');
-let activeId = activeBoard[0]?.id;
+let activeBoard = document.querySelector('.board.active') || null;
+let activeId = '';
 
 let boards = document.querySelectorAll('.board');
 let boardTabs = document.querySelectorAll('.board-tab');
+
+
 
 
 let postContainer = JSON.parse(localStorage.getItem('permanentContainer')) || {'1': {}};
@@ -23,7 +25,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
   Object.keys(postContainer).forEach((boardID) => {
     createOnload(boardID);
-  });
+
+    Object.keys(postContainer[boardID]).forEach((postItKey) => {
+      const postItData = postContainer[boardID][postItKey];
+      if (postItData.text && postItData.x !== undefined && postItData.y !== undefined) {
+
+        createDivOnLoad(boardID, postItKey, postItData.text, postItData.color, postItData.x, postItData.y);
+
+      }
+    });
 
   const firstTab = document.querySelector('.board-tab');
   if (firstTab) {
@@ -31,9 +41,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const firstBoard = document.getElementById(firstTab.id.replace('tab', ''));
     if (firstBoard) {
       firstBoard.classList.add('active');
+      activeId = document.querySelector('.board.active').id;
     }
   }
-});
+  
+})})
 
 
 
@@ -78,8 +90,6 @@ function createOnload(id) {
   boardClose.classList.add('board-close');
   boardTab.appendChild(boardClose);
 
-
-
 }
 
 function createBoard() {
@@ -113,6 +123,8 @@ function createBoard() {
   };
 
   switchBoard(boardTab);
+
+
 }
 
 newBoard.addEventListener('click', () => {
@@ -179,6 +191,9 @@ function switchBoard(clicked) {
 
   // need to activate the corresponding board 
   document.getElementById(`${clickedId}`).classList.add('active');
+
+  
+  activeId = document.querySelector('.board.active').id;
 };
 
 
@@ -240,6 +255,42 @@ function createDiv(title, text, color, x, y) {
   divClose.appendChild(divCloseIcon);
 }
 
+function createDivOnLoad(board, title, text, color, x, y) {
+  const divBorder = document.createElement('div');
+  const div = document.createElement('div');
+  let divTitle = document.createElement('div');
+  let divText = document.createElement('div');
+  const container = document.getElementById(board);
+  const divClose = document.createElement('button');
+  const divCloseIcon = document.createElement('img');
+
+  div.classList.add('div-container');
+  if (!color || typeof color !== 'string' || color.trim() === '' || color === 'null') {
+    color = 'rgb(255, 213, 0)';
+  }
+
+  div.style.backgroundColor = color;
+  div.style.left = `${x}px`;
+  div.style.top = `${y}px`;
+
+  divTitle.classList.add('div-title');
+  divTitle.textContent = title;
+
+  divText.classList.add('div-text');
+  divText.textContent = text;
+
+  divBorder.classList.add('div-border');
+  divClose.classList.add('div-close');
+
+  divCloseIcon.src = './close.png';
+
+  container.appendChild(div);
+  div.appendChild(divBorder);
+  div.appendChild(divTitle);
+  div.appendChild(divText);
+  divBorder.appendChild(divClose);
+  divClose.appendChild(divCloseIcon);
+}
 
 // const customAlert = document.querySelector('.custom-alerter');
 // let alertMsg = ['ADDED', 'ERROR'];
@@ -256,8 +307,8 @@ createButton.addEventListener('click', () => {
     postContainer[activeId][title] = {
       text: text,
       color: color,
-      x: Math.random() * 600,
-      y: Math.random() * 600,
+      x: Math.random() * 400,
+      y: Math.random() * 400,
     };
   }
 
@@ -271,7 +322,7 @@ createButton.addEventListener('click', () => {
 
   if (newTitle.length > 0 && newText.length > 0) {
     createObject(newTitle, newText, newColor);
-    createDiv(newTitle, newText, newColor, Math.random() * 1600, Math.random() * 600);
+    createDiv(newTitle, newText, newColor, Math.random() * 1000, Math.random() * 600);
 
     inputTitle.value = '';
     inputText.value = '';
@@ -343,25 +394,30 @@ createIcon.addEventListener('click', () => {
 });
 
 
-document.querySelector('.board.active').addEventListener('mousedown', (e) => {
-  const box = e.target.closest('.div-container');
+document.querySelector('.boards-container').addEventListener('mousedown', (e) => {
+  const box = e.target.closest('.div-container'); 
   if (!box) return;
 
-  if (e.ctrlKey) {
+  // Shift+Click to edit
+  if (e.shiftKey) {
     box.setAttribute('contenteditable', 'true');
     box.focus();
 
     function stopEditing(event) {
       if (event.type === 'blur' || (event.type === 'keydown' && event.key === 'Enter')) {
-        const title = box.querySelector('.div-title').textContent;
-        const content = box.querySelector('.div-text').textContent;
+        const title = box.querySelector('.div-title').textContent.trim();
+        const content = box.querySelector('.div-text').textContent.trim();
+        const activeId = document.querySelector('.board.active').id;
 
-        if (postContainer[title]) {
-          postContainer[title].text = content;
+        // Update postContainer structure
+        if (postContainer[activeId][title]) {
+          postContainer[activeId][title].text = content;
         }
 
+        // Save to localStorage
         localStorage.setItem('permanentContainer', JSON.stringify(postContainer));
 
+        // Remove editable state
         box.removeAttribute('contenteditable');
         box.removeEventListener('blur', stopEditing);
         box.removeEventListener('keydown', stopEditing);
@@ -373,11 +429,10 @@ document.querySelector('.board.active').addEventListener('mousedown', (e) => {
     return;
   }
 
+  // Drag functionality
   let isDragging = false;
   const offsetX = e.clientX - box.offsetLeft;
   const offsetY = e.clientY - box.offsetTop;
-
-  const allBoxes = document.querySelectorAll('.div-container');
 
   function moveBox(moveEvent) {
     isDragging = true;
@@ -390,10 +445,16 @@ document.querySelector('.board.active').addEventListener('mousedown', (e) => {
 
   function endDrag() {
     if (isDragging) {
-      const title = box.querySelector('.div-title').textContent;
-      postContainer[title].x = box.offsetLeft;
-      postContainer[title].y = box.offsetTop;
+      const activeId = document.querySelector('.board.active').id;
+      const title = box.querySelector('.div-title').textContent.trim();
 
+      // Update coordinates in postContainer
+      if (postContainer[activeId][title]) {
+        postContainer[activeId][title].x = box.offsetLeft;
+        postContainer[activeId][title].y = box.offsetTop;
+      }
+
+      // Save to localStorage
       localStorage.setItem('permanentContainer', JSON.stringify(postContainer));
     }
 
@@ -402,13 +463,12 @@ document.querySelector('.board.active').addEventListener('mousedown', (e) => {
   }
 
   document.addEventListener('mousemove', moveBox);
-  document.addEventListener('mouseup', endDrag, { once: true });
+  document.addEventListener('mouseup', endDrag);
 });
 
 
+
 //Search
-
-
 document.addEventListener('DOMContentLoaded', () => {
   searchItem.addEventListener('click', () => {
     if (!searchBar.classList.contains('searching')) {
