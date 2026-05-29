@@ -828,7 +828,7 @@ document.addEventListener('DOMContentLoaded', () => {
       },
 
       'Example': {
-        html: `Hello! Checking in from Albuquerque.<br>- KM<br><img src="./sample-img.jpg" style="max-width:100%;display:block;margin:4px 0">`,
+        html: `Hello! Checking in from Albuquerque.<br>- KM<br><img src="./sample-img1.webp" style="max-width:100%;display:block;margin:4px 0">`,
         text: 'Hello! Checking in from Albuquerque. - KM',
         color: 'rgb(255, 213, 0)',
         x: 36, y: 320
