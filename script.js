@@ -775,14 +775,74 @@ document.addEventListener('DOMContentLoaded', () => {
   const savedOrder = JSON.parse(localStorage.getItem('boardOrder')) || null;
 
   if (Object.keys(postContainer).length === 0) {
-    postContainer['1'] = { boardTitle: 'Board 1' };
+    // ── Demo seed — shown to first-time visitors ──────────────────────────────
+    // Board 1: Welcome!
+    postContainer['1'] = {
+      boardTitle: 'Welcome!',
+
+      'My First "Full-Stack" Project': {
+        html: `Welcome to my second independent project!<br><br>I call it <b>Post-It Que?</b> <i>(post-it what?)</i>`,
+        text: 'Welcome to my second independent project! I call it Post-It Que? (post-it what?)',
+        color: 'rgb(0, 255, 0)',
+        x: 52, y: 140
+      },
+
+      'Inspiration': {
+        html: `Call me simple, but I still use Post-It notes everyday to keep track of things I need to get done.<br><br>Simultaneously, I'd been using MS OneNote a LOT at work.<br><br><b>Post-It Que</b> was born mainly from those two influences (and the need to practice my newly-learned JavaScript skills)`,
+        text: 'Call me simple, but I still use Post-It notes everyday to keep track of things I need to get done.',
+        color: 'rgb(218, 125, 244)',
+        x: 275, y: 140
+      },
+
+      'About': {
+        html: `The tool is pretty simple:<br>- <b>HTML</b> shell to structure the website<br>- <b>CSS</b> (variables) to set consistent styles for reusable elements in the UI<br>- <b>JavaScript</b> to define elements (post-its and boards) and their respective functions`,
+        text: 'The tool is pretty simple: HTML shell to structure the website. CSS variables to set consistent styles. JavaScript to define elements.',
+        color: 'rgb(14, 135, 255)',
+        x: 496, y: 140
+      },
+
+      'Functionalities': {
+        html: `<ul><li><b>Create</b>, edit, and delete post-its</li><li>Add bold, italic, underlined, or event pasted images to your post-it</li><li>Query amongst all saved data using the <b>Search</b> button</li><li><b>Save</b> data (in localStorage)</li></ul>`,
+        text: 'Create, edit, and delete post-its. Add bold, italic, underlined, or event pasted images to your post-it.',
+        color: 'rgb(255, 80, 80)',
+        x: 706, y: 140
+      },
+
+      'Image Functionality': {
+        html: `<b>You can even paste images!</b><br><i>(my girlfriend is not too happy about the screenshot I'm using for it)</i><br><img src="./sample-img.jpg" style="max-width:100%;display:block;margin:4px 0">`,
+        text: 'You can even paste images!',
+        color: 'rgb(255, 213, 0)',
+        x: 706, y: 340
+      }
+    };
+
+    // Board 2: Try it Out!
+    postContainer['2'] = {
+      boardTitle: 'Try it Out!',
+
+      'Try It Out': {
+        html: `If you made it this far, <b>try it out!</b> Make a note that says:<ul><li>Your name (or initials)</li><li>A short message <i>(try pasting an image in!)</i></li><li>Drag the post-it wherever you want on the board</li></ul>`,
+        text: 'If you made it this far, try it out! Make a note that says: Your name, a short message, drag it around.',
+        color: 'rgb(42, 161, 152)',
+        x: 36, y: 130
+      },
+
+      'Example': {
+        html: `Hello! Checking in from Albuquerque.<br>- KM<br><img src="./sample-img.jpg" style="max-width:100%;display:block;margin:4px 0">`,
+        text: 'Hello! Checking in from Albuquerque. - KM',
+        color: 'rgb(255, 213, 0)',
+        x: 36, y: 320
+      }
+    };
+    // ─────────────────────────────────────────────────────────────────────────
   }
 
   // Build boards in saved order if available
   const allIds = Object.keys(postContainer);
+  const savedOrderDefault = allIds; // insertion order is correct for fresh seed
   const orderedIds = savedOrder
     ? [...savedOrder.filter(id => allIds.includes(id)), ...allIds.filter(id => !savedOrder.includes(id))]
-    : allIds;
+    : savedOrderDefault;
 
   orderedIds.forEach(boardId => {
     buildBoardEl(boardId);
