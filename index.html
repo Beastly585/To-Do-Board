@@ -4,104 +4,135 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Post-it que?</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+        integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer">
   <link rel="stylesheet" href="./style.css">
-
 </head>
-
-
 <body>
 
-
-  <header></header>
-
-  <!-- <div class="delete-area">
-    <i class="fa-solid fa-trash"></i>
-  </div> -->
-
-  <div class="custom-alerter">
-    <div class="alert-msg">
-      
-    </div>
+  <!-- ── App Title Bar ── -->
+  <div class="app-titlebar">
+    <span class="app-titlebar-icon">📌</span>
+    <span class="app-titlebar-name">Post-it que?</span>
   </div>
 
-  
-    <div class="nav-main-container">
+  <!-- ── Toolbar (action bar below title) ── -->
+  <div class="toolbar">
 
-      <div class="save-item nav-item">
-        <img src="./save.png" alt="save-button" class="save1">
-        <!-- <i class="fa-regular fa-floppy-disk save1"></i> -->
+    <!-- Search: pushed to right, bar expands leftward from icon, save is last -->
+    <div class="search-group">
+      <div class="searchbar">
+        <input type="text" id="userSearch" placeholder="Search…" autocomplete="off">
+        <button class="search-go">GO</button>
       </div>
-      
-      <div class="search-item nav-item">
-        <img src="./search.png" alt="search-button" class="" id="search">
-        <!-- <i class="fa-solid fa-magnifying-glass" id="search"></i> -->
-        <div class="searchbar">
-          <input type="text" id="userSearch">
-          <button class="search-go">GO</button>
-        </div>
-        
-      </div>
+      <button class="toolbar-btn" id="search-toggle" title="Search post-its">
+        <img src="./search.png" alt="Search" class="tb-icon">
+        <span>Search</span>
+      </button>
+    </div>
 
-      <div class="new-item nav-item">
-        <div class="new-entry">
-          <i class="fa-regular fa-plus" id="create"></i>
+    <div class="toolbar-sep"></div>
+
+    <!-- Save pinned to far right -->
+    <div class="toolbar-save-group">
+      <span id="unsaved-indicator" class="unsaved-blink" style="display:none">● UNSAVED</span>
+      <button class="toolbar-btn save1" title="Save (Ctrl+S)">
+        <img src="./save.png" alt="Save" class="tb-icon">
+        <span>Save</span>
+      </button>
+    </div>
+
+  </div><!-- end toolbar -->
+
+  <!-- ── Board Tabs Bar ── -->
+  <div class="boards">
+    <div class="boards-nav">
+      <button class="add-board" title="New board">+</button>
+    </div>
+    <div class="boards-container">
+
+      <!-- FAB lives here — position:absolute against boards-container -->
+      <button class="new-entry board-fab" title="New note (N)">
+        <i class="fa-regular fa-plus"></i>
+        <span>New Note</span>
+      </button>
+
+      <!-- Create panel — drops down from FAB -->
+      <div class="new-selector" id="create-panel">
+        <div class="panel-titlebar">
+          <span>✎ New Post-it</span>
+          <button class="panel-close-btn" id="panel-close">✕</button>
         </div>
-        
-        <div class="new-selector">
-          <div class="title-input sub1">
-            <label for="newTitle">Post-it Name:</label>
-            <input type="text" id="newTitle" placeholder="Label">
+
+        <div class="panel-body">
+          <div class="field-row">
+            <label for="newTitle">Title</label>
+            <input type="text" id="newTitle" placeholder="e.g. Shopping list" autocomplete="off">
           </div>
-          <div class="content-input sub2">
-            <label for="stringInput">Description:</label>
-            <textarea type="text" id="stringInput" placeholder="Insert text"></textarea>
+
+          <div class="field-row">
+            <label>Content</label>
+            <div class="text-tools">
+              <button type="button" class="fmt-btn" data-cmd="bold"                title="Bold (Ctrl+B)"><b>B</b></button>
+              <button type="button" class="fmt-btn" data-cmd="italic"              title="Italic (Ctrl+I)"><i>I</i></button>
+              <button type="button" class="fmt-btn" data-cmd="underline"           title="Underline (Ctrl+U)"><u>U</u></button>
+              <button type="button" class="fmt-btn" data-cmd="insertUnorderedList" title="Bullet list">≡</button>
+              <button type="button" id="img-paste-btn"                             title="Insert image">🖼</button>
+            </div>
+            <div id="stringInput" class="composer" contenteditable="true" data-placeholder="Write something…"></div>
+            <input type="file" id="image-uploader" accept="image/*" style="display:none">
           </div>
-          <div class="bgcolor-select sub3" id="bgColorSelect">
-            <label for="colorPick">Pick a Color:</label>
-            <div class="color-options" id="colorPick">
-              <button class="color orange"></button>
-              <button class="color yellow"></button>
-              <button class="color green"></button>
-              <button class="color blue"></button>
-              <button class="color pink"></button>
-              <button class="color purple"></button>
-              
+
+          <div class="field-row">
+            <label>Color</label>
+            <div class="color-picker-wrap">
+              <div class="color-preview-row">
+                <div id="color-preview" class="color-preview-swatch"></div>
+                <input type="text" id="color-hex" value="#ffd500" maxlength="7" class="hex-input" placeholder="#rrggbb">
+              </div>
+              <div class="slider-row">
+                <span class="slider-lbl">H</span>
+                <input type="range" id="color-hue" min="0" max="360" value="48" class="hue-slider">
+              </div>
+              <div class="slider-row">
+                <span class="slider-lbl">S</span>
+                <input type="range" id="color-sat" min="0" max="100" value="100" class="sat-slider">
+              </div>
+              <div class="slider-row">
+                <span class="slider-lbl">L</span>
+                <input type="range" id="color-lit" min="10" max="95" value="50" class="lit-slider">
+              </div>
+              <div class="color-presets">
+                <button class="color-preset" data-color="#FFD500" style="background:#FFD500" title="Yellow"></button>
+                <button class="color-preset" data-color="#FF7300" style="background:#FF7300" title="Orange"></button>
+                <button class="color-preset" data-color="#FF4D4D" style="background:#FF4D4D" title="Red"></button>
+                <button class="color-preset" data-color="#FF80AB" style="background:#FF80AB" title="Pink"></button>
+                <button class="color-preset" data-color="#DA7DF4" style="background:#DA7DF4" title="Purple"></button>
+                <button class="color-preset" data-color="#0E87FF" style="background:#0E87FF" title="Blue"></button>
+                <button class="color-preset" data-color="#2AA198" style="background:#2AA198" title="Teal"></button>
+                <button class="color-preset" data-color="#ADFF2F" style="background:#ADFF2F" title="Green"></button>
+                <button class="color-preset" data-color="#C0703A" style="background:#C0703A" title="Brown"></button>
+                <button class="color-preset" data-color="#F5E1C3" style="background:#F5E1C3" title="Beige"></button>
+                <button class="color-preset" data-color="#B0B0B0" style="background:#B0B0B0" title="Grey"></button>
+                <button class="color-preset" data-color="#FFFFFF" style="background:#FFFFFF;border-color:#999" title="White"></button>
+              </div>
             </div>
           </div>
-        
-          <button class="create-button"></button>
+
+          <button class="create-button" title="Create post-it">CREATE NOTE</button>
         </div>
       </div>
-    </div>
-  
-    <div class="boards">
 
-      <div class="boards-nav">
-        
-        
+    </div><!-- end boards-container -->
+  </div><!-- end boards -->
 
-        <button class="add-board"></button>
-
-      </div>
-
-
-
-      <div class="boards-container">
-    
-      </div>
-
-    </div>
-   
-
-
-  <footer>
-
-  </footer>
-
+  <!-- ── Status Bar ── -->
+  <div class="status-bar">
+    <span id="status-bar-msg">Ready</span>
+    <span class="status-right">Post-it que? v2.0</span>
+  </div>
 
 </body>
-
 <script src="./script.js"></script>
-
 </html>
